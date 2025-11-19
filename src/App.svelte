@@ -4,6 +4,7 @@
 	let name = 'Svelte';
 	let apiData = $state([])
 	let plotTemp = $state([])
+	let buttonText = $state("")
 
 	onMount(()=>{
 		axios.get("https://tam-arduino-api.vercel.app/data").then((response)=>{
@@ -14,7 +15,17 @@
 			})
 
 		})
+		axios.get("https://tam-arduino-api.vercel.app/led").then((response)=>{
+			setButtonText(response.data.on_state)
+		})
+		
 	})	
+	function setButtonText(ledState){
+		if(ledState)
+			buttonText = "Desligar"
+		else
+			buttonText = "Ligar"
+	}
 	
 	function getDate(timestamp){
 		const date = new Date(0)
@@ -28,6 +39,14 @@
 		date.setUTCSeconds(timestamp)
 
 		return date.getHours() + ":" + date.getMinutes() 
+	}
+
+	function changeLed(){
+		axios.put("https://tam-arduino-api.vercel.app/led")
+
+		axios.get("https://tam-arduino-api.vercel.app/led").then((response)=>{
+			setButtonText(response.data.on_state)
+		})
 	}
 
 
@@ -95,10 +114,14 @@
 
 	</div>
 
+	
+
 
 	
 
 </div>
+<button on:click={changeLed}>{buttonText}</button>
+
 
 <style>
 	#main{
@@ -107,8 +130,7 @@
 	}
 	
 	h1 {
-		color: aquamarine;
-		font-family: 'Comic Sans MS', cursive;
+		color: rgb(0, 0, 0);
 		font-size: 2em;
 	}
 	table, th, td {
@@ -119,6 +141,19 @@
 	}
 	th, td{
 		padding: 8px;
+	}
+	button{
+		margin-top: 32px;
+		border-radius: 500px;
+		border: 3px solid #00679A;
+		background-color: #0099e6;
+		color: white;
+		font-size: medium;
+		width: 58%;
+		height: 50px;
+	}
+	button:hover {
+		opacity: 0.85
 	}
 </style>
 
