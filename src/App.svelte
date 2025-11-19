@@ -21,6 +21,7 @@
 		
 	})	
 	function setButtonText(ledState){
+		console.log(ledState)
 		if(ledState)
 			buttonText = "Desligar"
 		else
@@ -44,9 +45,11 @@
 	function changeLed(){
 		axios.put("https://tam-arduino-api.vercel.app/led")
 
-		axios.get("https://tam-arduino-api.vercel.app/led").then((response)=>{
-			setButtonText(response.data.on_state)
-		})
+		if(buttonText == "Desligar")
+			buttonText = "Ligar"
+		else
+			buttonText = "Desligar"
+
 	}
 
 
