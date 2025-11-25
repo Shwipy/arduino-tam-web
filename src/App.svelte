@@ -3,6 +3,7 @@
   	import axios from "axios";
 	let name = 'Svelte';
 	let apiData = $state([])
+	let logData = $state([])
 	let plotTemp = $state([])
 	let buttonText = $state("")
 
@@ -17,6 +18,14 @@
 		})
 		axios.get("https://tam-arduino-api.vercel.app/led").then((response)=>{
 			setButtonText(response.data.on_state)
+		})
+		axios.get("https://tam-arduino-api.vercel.app/logs").then((response)=>{
+			logData = response.data
+
+			plotTemp = logData.map((data)=> {
+				return {x:data.create_date,y:data.temp}
+			})
+
 		})
 		
 	})	
@@ -123,7 +132,33 @@
 	
 
 </div>
+<h2>LED</h2>
 <button on:click={changeLed}>{buttonText}</button>
+
+<div>
+		<h2>Logs</h2>
+		<table>
+			<thead>
+                <tr>
+					<th>Dia</th>
+                    <th>Pedido</th>
+					<th>Realizado</th>
+					<th>Ação</th>
+                </tr>
+					{#each logData as data}
+						<tr>
+						<td>{getDate(data.time_started)}</td>
+						<td>{getHours(data.time_started)}</td>
+						<td>{getHours(data.time_completed)}</td>
+						<td>{data.action}</td>
+						</tr>
+					{/each}
+
+            </thead>
+
+		</table>
+
+	</div>
 
 
 <style>
@@ -146,7 +181,6 @@
 		padding: 8px;
 	}
 	button{
-		margin-top: 32px;
 		border-radius: 500px;
 		border: 3px solid #00679A;
 		background-color: #0099e6;
