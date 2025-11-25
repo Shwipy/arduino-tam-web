@@ -45,6 +45,9 @@
 	}
 
 	function getHours(timestamp){
+		if (timestamp === null)
+			return "-"
+
 		const date = new Date(0)
 		date.setUTCSeconds(timestamp)
 
