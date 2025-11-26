@@ -51,17 +51,21 @@
 		const date = new Date(0)
 		date.setUTCSeconds(timestamp)
 
-		return date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds()
+		return getFormattedTime(date.getHours()) + ":" + getFormattedTime(date.getMinutes()) + ":" + getFormattedTime(date.getSeconds())	
 	}
 
 	function changeLed(){
-		axios.put("https://tam-arduino-api.vercel.app/led")
+		axios.put("https://tam-arduino-api.vercel.app/led")	
 
 		if(buttonText == "Desligar")
 			buttonText = "Ligar"
 		else
 			buttonText = "Desligar"
 
+	}
+
+	function getFormattedTime(time){
+  		return (time <= 9) ? ("0" + time) : time
 	}
 
 
