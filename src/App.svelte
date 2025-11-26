@@ -51,7 +51,7 @@
 		const date = new Date(0)
 		date.setUTCSeconds(timestamp)
 
-		return date.getHours() + ":" + date.getMinutes() 
+		return date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds()
 	}
 
 	function changeLed(){
