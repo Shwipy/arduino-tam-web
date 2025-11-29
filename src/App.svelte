@@ -6,8 +6,17 @@
 	let logData = $state([])
 	let plotTemp = $state([])
 	let buttonText = $state("")
+	let intervalId;
 
 	onMount(()=>{
+		fetchData()
+
+		intervalId = setInterval(fetchData, 5000)
+		return () => clearInterval(intervalId)
+	})	
+
+	//https://stackoverflow.com/questions/56891190/how-to-trigger-force-update-a-svelte-component
+	async function fetchData(){
 		axios.get("https://tam-arduino-api.vercel.app/data").then((response)=>{
 			apiData = response.data
 
@@ -27,8 +36,9 @@
 			})
 
 		})
-		
-	})	
+	}
+
+
 	function setButtonText(ledState){
 		console.log(ledState)
 		if(ledState)
